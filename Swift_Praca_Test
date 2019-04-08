@@ -1,0 +1,125 @@
+import Foundation
+import Glibc
+import Swift
+ 
+protocol ableToDo 
+{
+    var text : String {get}
+    var done : Bool {get set}
+    var week : String {get}
+}
+
+protocol delegateInput 
+{
+    func viewArray()
+}
+
+
+class CheckList: delegateInput
+{   
+    
+    func viewArray() 
+    {
+        for objects in object 
+        {
+            print(objects)
+        }
+    }
+    func everyThird() 
+    {
+        for index in stride(from:0,to:object.count,by:3)
+        {
+            print("\(object[index])")
+        }
+    }   
+    
+    
+    
+    var object = [AnyObject]()
+    
+    
+    init(_ matrix:[AnyObject])
+    {
+        self.object = matrix
+    }
+
+}
+
+class CheckListElement: CustomStringConvertible, ableToDo
+{
+    var delegate:delegateInput?
+    var text : String
+    var done : Bool
+    var week : String
+    
+    
+    func desc () -> String 
+    {
+        if done == true 
+        {
+            return "Gotowe"
+        }
+        else
+        {
+            return "Do zrobienia"
+        }
+    }
+    
+    func setDone (_ change:Bool) -> Bool
+    {
+        if change == true
+        {
+            self.done = true
+            self.delegate?.viewArray()
+            return done
+        }
+        else
+        {
+            self.done = false
+            self.delegate?.viewArray()
+            return done
+        }
+    }
+    
+    func viewArray() {
+        self.delegate?.viewArray()
+    }
+    
+    init(_ week:String,_ text:String,_ done:Bool) 
+    {
+        self.text = text
+        self.done = done
+        self.week = week
+    }
+    
+    var description:String 
+    {
+        return "\(week) -> \(text) -> \(self.desc())"
+    }
+} 
+let check1 = CheckListElement("Poniedziałek","kanapka",true)
+let check2 = CheckListElement("Wtorek","kurczak",false)
+let check3 = CheckListElement("Środa","killować apki",false)
+let check4 = CheckListElement("Sobota","pouczyć się",true)
+let check5 = CheckListElement("Niedziela","robotka",false)
+let check6 = CheckListElement("Piątek","wyspać się",true)
+var matrix1 : [AnyObject] = [check1,check2,check3,check4,check5,check6]
+let main = CheckList(matrix1)
+check1.delegate = main
+check2.delegate = main
+check3.delegate = main
+check4.delegate = main
+check5.delegate = main
+check6.delegate = main
+print("-----Check3 change to true-----")
+check3.setDone(true)
+print("-----Check6 change to false-----")
+check6.setDone(false)
+print("-----EveryThird Function-----")
+main.everyThird()
+
+
+
+
+
+
